@@ -21,43 +21,71 @@ def new_game():
     print("reset pressed")
     pass
 
+# Check if the game has a winner
 def check_winner():
     global turns, game_over
     turns += 1
+    # Game can not be won with less than 5 total turns
     if turns > 4:
-        if (check_horizontal_win() or check_vertical_win()):
+        # Check all possible ways of winning
+        if (check_horizontal_win() or check_vertical_win() or check_diagonal_win()):
             game_over = True
             return
     else:
         pass
 
-
-def check_vertical_win():
-    for column in range(3):
-        if (board[0][column]["text"] != ""):
-            if (board[0][column]["text"] == board[1][column]["text"] == board[2][column]["text"]):
-                print('Voittooooo')                
-
-
-
-
-# Check if horizontal row contains three of the same symbols
-def check_horizontal_win():
-    # Iterate over all gameboard rows
-    for row in range(3):
-        # Ensure that the first cell is not empty
-        if board[row][0]["text"] != "":
-            # Check if the whole row is the same symbol
-            if (board[row][0]["text"] == board[row][1]["text"] == board[row][2]["text"]):
-                print('voitto')
-                label.config(text=board[row][0]["text"]+" is the winner!", foreground=color_yellow)
-                # Change row color if win
-                for column in range(3):
-                    board[row][column].config(foreground=color_yellow, background=color_light_gray)    
+# Announce winner on the gameboard
+def announce_winner(winner):
+    # Change label to winner's symbol
+    label.config(text=winner["symbol"]+" is the winner!", foreground=color_yellow)
+    # Change color to indicate winning cells
+    for cell in winner["winning_cells"]:
+        cell.config(foreground=color_yellow, background=color_light_gray)
     return
 
 
+# Check for horizontal wins
+def check_vertical_win():
+    # Iterate over all columns
+    for column in range(3):
+        # Check if all column cells contain same symbol and ensure the first cell is not empty
+        if (board[0][column]["text"] == board[1][column]["text"] == board[2][column]["text"] and board[0][column]["text"] != ""):
+            # Announce winner if all column cells contained the same symbol
+            announce_winner({
+                "winning_cells": [board[0][column], board[1][column], board[2][column]],
+                "symbol": board[0][column]["text"]
+            })
+            return           
 
+
+# Check for diagonal wins
+def check_diagonal_win():
+    # Initialize function to iterate over diagonal cells
+    def check_diagonal(cells):
+        # Check if all diagonal cells contain same symbol and ensure the first cell is not empty
+        if cells[0]["text"] == cells[1]["text"] == cells[2]["text"] and cells[0]["text"] != "":
+            # Announce winner if all diagonal cells contained the same symbol
+            announce_winner({
+                "winning_cells": cells,
+                "symbol": cells[0]["text"]
+            })
+    # Call function to check diagonals
+    check_diagonal([board[0][0], board[1][1], board[2][2]])  # upper left to bottom right
+    check_diagonal([board[0][2], board[1][1], board[2][0]])  # bottom left to upper right
+
+
+# Check for horizontal wins
+def check_horizontal_win():
+    # Iterate over all rows
+    for row in range(3):
+        # Check if all row cells contain same symbol and ensure the first cell is not empty
+        if board[row][0]["text"] == board[row][1]["text"] == board[row][2]["text"] and board[row][0]["text"] != "":
+            # Announce winner if all row cells contained the same symbol
+            announce_winner({
+                "winning_cells": [board[row][0], board[row][1], board[row][2]],
+                "symbol": board[row][0]["text"]
+            })
+            return
 
 
 # Initialize new game
