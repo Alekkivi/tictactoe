@@ -1,5 +1,50 @@
 import tkinter
 
+# Create main menu window
+def create_main_menu():
+    label_hi = tkinter.Label(window, text="Hi", font=("Arial", 20))
+    label_hi.pack(pady=20)
+    start_button = tkinter.Button(window, text="Start New Game", command=start_game, font=("Arial", 15))
+    start_button.pack(pady=20)
+
+def back_to_menu():
+    # Clear the window and return to the menu
+    for widget in window.winfo_children():
+        widget.destroy()
+    create_main_menu()
+
+def start_game():
+    # Clear the window and start the game logic
+    for widget in window.winfo_children():
+        widget.destroy()
+    create_game_board()
+
+
+def create_game_board():
+    global board, current_player, label, player_x, player_o, turns, game_over
+
+    player_x = "X"
+    player_o = "O"
+    current_player = player_x
+    turns = 0
+    game_over = False
+
+    # Create a label to display the current player's turn
+    label = tkinter.Label(window, text=current_player + "'s turn", font=("Helvetica", 15))
+    label.grid(row=0, column=0, columnspan=3)
+
+    # Create the 3x3 grid
+    board = [[0,0,0], [0,0,0], [0,0,0]]
+    for row in range(3):
+        for column in range(3):
+            board[row][column] = tkinter.Button(window, text="", font=("arial", 40, "bold"), background=color_gray, foreground=color_blue, width=4, height=1, command=lambda row=row, column=column: set_title(row, column))
+            board[row][column].grid(row=row+1, column=column)
+
+    back_to_menu_btn = tkinter.Button(window, text="Back to menu", font=("arial", 20), background=color_gray, foreground="white", command=back_to_menu)
+    back_to_menu_btn.grid(row=4, column=0, columnspan=3, sticky="we")
+
+
+            
 def set_title(row, column):
     global current_player
     selected_button = board[row][column]
@@ -17,9 +62,7 @@ def set_title(row, column):
     check_winner()
     pass
 
-def new_game():
-    print("reset pressed")
-    pass
+
 
 # Check if the game has a winner
 def check_winner():
@@ -88,48 +131,15 @@ def check_horizontal_win():
             return
 
 
-# Initialize new game
-player_x = "X"
-player_o = "O"
-turns = 0
-game_over = False
-
-current_player = player_x
-board = [[0,0,0], [0,0,0], [0,0,0]]
-
+# Initialize colors
 color_blue = "#4584b6"
 color_yellow = "#ffde57"
 color_gray = "#434343"
 color_light_gray = "#646464"
 
-# Game window
+# Main window
 window = tkinter.Tk()
-window.title = "Tic Tac Toe"
-window.resizable(False, False)
-
-frame = tkinter.Frame(window)
-label = tkinter.Label(frame, text = current_player +"'s turn", background=color_gray, font=("arial", 20), foreground="white")
-
-label.grid(row=0, column=0, columnspan=3, sticky="we")
-
-for row in range(3):
-    for column in range(3):
-        board[row][column] = tkinter.Button(frame, text="", font=("arial", 50, "bold"), background=color_gray, foreground=color_blue, width=4, height=1, command=lambda row=row, column=column: set_title(row, column))
-        board[row][column].grid(row=row+1, column=column)
-
-button = tkinter.Button(frame, text="Restart", font=("arial", 20), background=color_gray, foreground="white", command=new_game)
-button.grid(row=4, column=0, columnspan=3, sticky="we")
-frame.pack()
-
-window.update()
-window_width = window.winfo_width()
-window_height = window.winfo_height()
-screen_width = window.winfo_screenwidth()
-screen_height = window.winfo_screenheight()
-
-window_x_coordinate = int((screen_width/2) - (window_width/2))
-window_y_coordinate = int((screen_height/2) - (window_height/2))
-
-window.geometry(f"{window_width}x{window_height}+{window_x_coordinate}+{window_y_coordinate}")
+window.title("Tic-Tac-Toe")
+create_main_menu()
 
 window.mainloop()
