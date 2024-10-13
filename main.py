@@ -4,36 +4,47 @@ import tkinter
 def create_main_menu():
     # Player options for dropdown
     player_options = ["Human player", "MiniMax"]
+    # Define windown bg color
+    window.configure(bg=color_gray)
 
     # Label for the title
-    label_hi = tkinter.Label(window, text="Welcome to Tic Tac Toe", font=("Arial", 15))
-    label_hi.grid(row=0, column=0, columnspan=2, pady=20)
+    label_hi = tkinter.Label(window, text="Welcome to Tic Tac Toe", font=("Arial", 15), bg=color_gray, foreground="white")
+    label_hi.grid(row=0, column=0, columnspan=2, pady=20, padx=20)
 
-    # Label and OptionMenu for Player 1
-    label_p1 = tkinter.Label(window, text="Player 1:", font=("Arial", 12))
-    label_p1.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+    # Label and dropdown for Player 1
+    label_p1 = tkinter.Label(window, text="Player 1:", font=("Arial", 12), bg=color_gray, foreground="white")
+    label_p1.grid(row=1, column=0, padx=5, pady=10, sticky="e")
 
-    # StringVar to hold the selected player option
     player1_var = tkinter.StringVar()
     player1_var.set(player_options[0])
 
-    # Create styled OptionMenu for Player 1
+    # Create styled dropdown for Player 1
     player1_selection = tkinter.OptionMenu(window, player1_var, *player_options)
     player1_selection.grid(row=1, column=1, padx=10, pady=10)
 
-    # Label and OptionMenu for Player 2
-    label_p2 = tkinter.Label(window, text="Player 2:", font=("Arial", 12))
-    label_p2.grid(row=2, column=0, padx=10, pady=10, sticky="e")
+    # Add styling to Player 1 dropdown
+    player1_selection.config(bg=color_gray, foreground="white", activebackground=color_blue)
+    player1_selection["menu"].config(bg=color_gray, foreground="white", activebackground=color_blue)
+    player1_selection["highlightthickness"] = 0
+
+    # Label and dropdown for Player 2
+    label_p2 = tkinter.Label(window, text="Player 2:", font=("Arial", 12), bg=color_gray, foreground="white")
+    label_p2.grid(row=2, column=0, padx=5, pady=10, sticky="e")
 
     player2_var = tkinter.StringVar()
     player2_var.set(player_options[0])
 
-    # Create styled OptionMenu for Player 2
+    # Create styled dropdown for Player 2
     player2_selection = tkinter.OptionMenu(window, player2_var, *player_options)
     player2_selection.grid(row=2, column=1, padx=10, pady=10)
 
+    # Add styling to Player 2 dropdown
+    player2_selection.config(bg=color_gray, foreground="white", activebackground=color_blue)
+    player2_selection["menu"].config(bg=color_gray, foreground="white", activebackground=color_blue)
+    player2_selection["highlightthickness"] = 0
+    
     # Start game button
-    start_button = tkinter.Button(window, text="Start New Game", command=start_game, font=("Arial", 15))
+    start_button = tkinter.Button(window, text="Start New Game", command=start_game, font=("Arial", 15), bg=color_gray, foreground="white")
     start_button.grid(row=3, column=0, columnspan=2, pady=20)
 
 # Bring out the main menu from game board
@@ -62,7 +73,7 @@ def create_game_board():
     game_over = False
 
     # Create a label to display the current player's turn
-    label = tkinter.Label(window, text=current_player + "'s turn", font=("Helvetica", 15))
+    label = tkinter.Label(window, text=current_player + "'s turn", font=("Arial", 15))
     label.grid(row=0, column=0, columnspan=3)
 
     # Create the 3x3 grid
